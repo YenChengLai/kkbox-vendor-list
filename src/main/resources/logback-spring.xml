@@ -1,14 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-	<property name="LOG_PATH" value="D://LOG//ECIP" /><!-- 設置變數，設置檔案路徑 -->
-	<!--輸出到console -->
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true" scanPeriod="60 seconds"
+	debug="false">
 
+	<!-- 設置變數，設置檔案路徑 -->
+	<property name="LOG_PATH" value="D://LOG//KKBOX" />
+
+	<!--输出到控制台 设置 -->
 	<appender name="Console-Appender"
 		class="ch.qos.logback.core.ConsoleAppender">
-		<layout>
-			<!-- 紀錄存放格式 -->
-			<pattern>%date %level [%thread] %logger{36} [%file : %line] %msg%n</pattern>
-		</layout>
+		<encoder>
+			<pattern> %d{HH:mm:ss.SSS} %contextName [%thread] %-5level
+				%logger{36} - %msg%n</pattern>
+		</encoder>
 	</appender>
 
 	<appender name="Hibernate-Appender"
@@ -19,13 +22,14 @@
 				%X{queryLog}%msg%n</pattern>
 		</layout>
 	</appender>
+
 	<!--輸出到文件 -->
 	<appender name="file-trace"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_PATH}/logback-trace-%d{yyyy-MM-dd}.log </fileNamePattern><!-- 
-				輸出文件的位置，以每一天做切割 -->
+			<fileNamePattern>${LOG_PATH}/logback-trace-%d{yyyy-MM-dd}.log
+			</fileNamePattern><!-- 輸出文件的位置，以每一天做切割 -->
 			<maxHistory>30</maxHistory><!-- 保留天數 -->
 		</rollingPolicy>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter"><!--設定trace以上級別才需要輸出至檔案 -->
@@ -37,29 +41,14 @@
 				%X{queryLog}%msg%n</pattern><!--Log的格式 -->
 		</encoder>
 	</appender>
+
 	<!--輸出到文件 sql -->
 	<appender name="file-sql"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_PATH}/logback-sql-%d{yyyy-MM-dd}.log </fileNamePattern><!-- 
-				輸出文件的位置，以每一天做切割 -->
-			<maxHistory>30</maxHistory><!-- 保留天數 -->
-		</rollingPolicy>
-		<encoder>
-			<charset>UTF-8</charset><!--中文編碼 -->
-			<pattern>%date %level [%thread] %logger{36} [%file : %line]
-				%X{queryLog}%msg%n</pattern>
-		</encoder>
-	</appender>
-
-	<!--輸出到文件 sql -->
-	<appender name="file-audit"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<rollingPolicy
-			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_PATH}/logback-audit-%d{yyyy-MM-dd}.log </fileNamePattern><!-- 
-				輸出文件的位置，以每一天做切割 -->
+			<fileNamePattern>${LOG_PATH}/logback-sql-%d{yyyy-MM-dd}.log
+			</fileNamePattern><!-- 輸出文件的位置，以每一天做切割 -->
 			<maxHistory>30</maxHistory><!-- 保留天數 -->
 		</rollingPolicy>
 		<encoder>
@@ -86,12 +75,8 @@
 		<appender-ref ref="file-sql" />
 	</logger>
 
-	<logger name="com.cathaybk.rest.base.auditlog" level="info"
-		additivity="false">
-		<appender-ref ref="file-audit" />
-	</logger>
-
 	<root level="info">
 		<appender-ref ref="Console-Appender" />
 	</root>
+
 </configuration>

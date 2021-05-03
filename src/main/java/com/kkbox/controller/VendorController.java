@@ -13,7 +13,7 @@ import com.kkbox.entity.Vendor;
 import com.kkbox.repository.VendorRepository;
 
 @Controller
-@RequestMapping("vendor-list")
+@RequestMapping("/vendor-list")
 public class VendorController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
