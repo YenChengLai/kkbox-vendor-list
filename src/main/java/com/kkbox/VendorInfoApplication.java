@@ -1,11 +1,10 @@
-package com.kkbox.vendorinfo;
+package com.kkbox;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan("com.kkbox")
+//@ComponentScan("com.kkbox")
 public class VendorInfoApplication {
 
 	public static void main(String[] args) {
