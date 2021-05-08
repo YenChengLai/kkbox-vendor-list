@@ -4,11 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-//@ComponentScan("com.kkbox")
-public class VendorInfoApplication {
+public class KkboxVendorListApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(VendorInfoApplication.class, args);
+		SpringApplication.run(KkboxVendorListApplication.class, args);
 	}
 
 }

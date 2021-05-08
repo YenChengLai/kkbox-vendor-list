@@ -1,34 +1,47 @@
 package com.kkbox.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * The persistent class for the vendor database table.
  * 
  */
 @Entity
-@NamedQuery(name="Vendor.findAll", query="SELECT v FROM Vendor v")
+@NamedQuery(name = "Vendor.findAll", query = "SELECT v FROM Vendor v")
 public class Vendor implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name = "taxId")
 	private String taxId;
 
+	@Column(name = "address")
 	private String address;
 
+	@Column(name = "corpName")
 	private String corpName;
 
+	@Column(name = "fax")
 	private String fax;
 
+	@Column(name = "filler")
 	private String filler;
 
+	@Column(name = "inCharge")
 	private String inCharge;
 
+	@Column(name = "memo")
 	private String memo;
 
+	@Column(name = "phone")
 	private String phone;
 
 	@Temporal(TemporalType.TIMESTAMP)

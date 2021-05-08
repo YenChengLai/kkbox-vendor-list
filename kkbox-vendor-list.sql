@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `kkbox` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `kkbox`;
 -- MySQL dump 10.13  Distrib 8.0.15, for macos10.14 (x86_64)
 --
 -- Host: 127.0.0.1    Database: kkbox
@@ -26,7 +24,7 @@ DROP TABLE IF EXISTS `contact`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `contact` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `taxId` varchar(20) NOT NULL,
+  `tax_id` varchar(20) NOT NULL,
   `name` varchar(45) NOT NULL,
   `job` varchar(45) NOT NULL,
   `phone` varchar(45) DEFAULT NULL,
@@ -52,16 +50,16 @@ DROP TABLE IF EXISTS `vendor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `vendor` (
-  `taxId` varchar(20) NOT NULL,
-  `corpName` varchar(45) NOT NULL,
+  `tax_id` varchar(20) NOT NULL,
+  `corp_name` varchar(45) NOT NULL,
   `phone` varchar(45) DEFAULT NULL,
   `filler` varchar(45) NOT NULL,
-  `updateTime` datetime NOT NULL,
-  `inCharge` varchar(45) NOT NULL,
+  `update_time` datetime NOT NULL,
+  `in_charge` varchar(45) NOT NULL,
   `fax` varchar(45) DEFAULT NULL,
   `memo` varchar(100) DEFAULT NULL,
   `address` varchar(60) NOT NULL,
-  PRIMARY KEY (`taxId`)
+  PRIMARY KEY (`tax_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -84,4 +82,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-03 20:34:53
+-- Dump completed on 2021-05-08 14:28:07
