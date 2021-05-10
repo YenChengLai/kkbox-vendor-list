@@ -38,37 +38,33 @@
 			initApp : function() {
 
 				function genNewTr() {
-					return $('<tr/>')
-							.append($('<td/>').append($('<input/>').attr({
-								type : 'text',
-								name : 'name'
-							}).addClass('input').css('border-style', 'none')))
-							.append($('<td/>').append($('<input/>').attr({
+					return $('<tr/>').append(
+						$('<td/>').append($('<input/>').attr({
+							type : 'text',
+							name : 'name'
+						}).addClass('input').css('border-style', 'none'))).append(
+							$('<td/>').append($('<input/>').attr({
 								type : 'text',
 								name : 'job'
 							}).addClass('input').css('border-style', 'none')))
-							.append($('<td/>').append($('<input/>').attr({
+						.append(
+							$('<td/>').append($('<input/>').attr({
 								type : 'text',
-								name : 'comPhone'
+								name : 'contactPhone'
 							}).addClass('input').css('border-style', 'none')))
-							.append($('<td/>').append($('<input/>').attr({
+						.append(
+							$('<td/>').append($('<input/>').attr({
 								type : 'text',
 								name : 'email'
 							}).addClass('input').css('border-style', 'none')))
-							.append(
-									$('<td/>')
-											.append(
-													$('<button/>')
-															.addClass(
-																	'deleteRow')
-															.attr('type',
-																	'button')
-															.html('-')
-															.click(function() {
-																		$(this).parents('tr').remove();
-																	})));
-				}
-				;
+						.append(
+							$('<td/>').append(
+								$('<button/>').addClass('deleteRow').attr('type','button').html('-').click(function() {
+									$(this).parents('tr').remove();
+								})
+							)
+						);
+				};
 
 				$('#commulator').on('click', '.addRow', function() {
 					$($('.deleteRow')[0]).parents('tr').after(genNewTr());
@@ -88,11 +84,84 @@
 				});
 
 				$('#btn_save').click(function(event) {
-					if (!$(this).get(0).checkValidity()) {
+					if (!$(this).parents('form').get(0).checkValidity()) {
 						event.preventDefault();
 						event.stopPropagation();
+						$('#saveForm').addClass('was-validated');
+						return;
 					}
-					$('#saveForm').addClass('was-validated');
+					
+					var vendor = {
+						filler: $('#filler').val(),
+						corpName: $('#corpName').val(),
+						taxId: $('#taxId').val(),
+						inCharge: $('#inCharge').val(),
+						address: $('#address').val(),
+						phone: $('#phone').val(),
+						fax: $('#fax').val(),
+						memo: $('#memo').val()
+					}
+					
+					var contacts = [];
+					var size = $('input[name="name"]').length;
+					
+					for (var i = 0; i < size; i++) {
+						var person = {
+							name: $('input[name="name"]').get(i).value,
+							job: $('input[name="job"]').get(i).value,
+							contactPhone: $('input[name="contactPhone"]').get(i).value,
+							email: $('input[name="email"]').get(i).value
+						}
+						contacts.push(person);
+					}
+					
+					var data = JSON.stringify({
+						contacts: contacts,
+						vendor: vendor
+					});
+					
+					$.ajax({
+						url: 'save',
+						type: 'post',
+						data: data,
+						contentType: "application/json;charset=utf-8;",
+						success: function(data) {
+							
+						}
+					})
+				});
+				
+				$.ajax({
+					url: 'getInitData',
+					type: 'post',
+					success: function(data) {
+						data = JSON.parse(data);
+						data.forEach(row => {
+							$('#placeInitData').append(
+								$('<tr/>').append(
+									$('<td/>').append(row.corpName)
+								).append(
+									$('<td/>').append(row.taxId)
+								).append(
+									$('<td/>').append(row.phone)
+								).append(
+									$('<td/>').append(row.inCharge)
+								).append(
+									$('<td/>').append(row.updateTime)		
+								).append(
+									$('<td/>').append(
+										$('<button/>').html('刪除').css({
+											'border-radius' : '20px',
+											'width' : '80px'
+										}).click(function(){
+											$(this).parents('tr').remove();
+										})
+									)
+								)
+							)
+						});
+						
+					}
 				});
 			}
 		};
@@ -103,7 +172,7 @@
 <head>
 <body>
 	<div style="border-style: solid; width: 90%; margin: 5% auto">
-		<div align="center">
+		<div align="center" style="margin-top: 15px">
 			<h1>廠商資料表</h1>
 		</div>
 
@@ -122,16 +191,7 @@
 					<th scope="col"></th>
 				</tr>
 			</thead>
-			<tbody class="text-center">
-				<tr>
-					<td>123</td>
-					<td>456</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td><button type="button" id="btn_delete">刪除</button></td>
-				</tr>
-			</tbody>
+			<tbody class="text-center" id="placeInitData"></tbody>
 		</table>
 		<br></br>
 		<form id="saveForm" data-toggle="validator" class="needs-validation">
@@ -147,16 +207,15 @@
 						<td>*填單人</td>
 						<td>
 							<div class="form-group">
-								<input type="text" class="input form-control valid"
-									id="paramManu" required />
+								<input type="text" class="input form-control valid" id=filler
+									required />
 								<div class="invalid-feedback">必填欄位</div>
 							</div>
 						</td>
-						<div class="help-block with-errors"></div>
 						<td>*公司名稱</td>
 						<td>
 							<div class="form-group">
-								<input type="text" class="input form-control" id="paramType"
+								<input type="text" class="input form-control" id="corpName"
 									required />
 								<div class="invalid-feedback">必填欄位</div>
 							</div>
@@ -166,7 +225,7 @@
 						<td>*統一編號</td>
 						<td>
 							<div class="form-group">
-								<input type="text" class="input form-control" id="paramMinPrice"
+								<input type="text" class="input form-control" id="taxId"
 									required />
 								<div class="invalid-feedback">必填欄位</div>
 							</div>
@@ -174,7 +233,7 @@
 						<td>*負責人</td>
 						<td>
 							<div class="form-group">
-								<input type="text" class="input form-control" id="paramPrice"
+								<input type="text" class="input form-control" id="inCharge"
 									required />
 								<div class="invalid-feedback">必填欄位</div>
 							</div>
@@ -184,7 +243,7 @@
 						<td>*地址</td>
 						<td colspan="3">
 							<div class="form-group">
-								<input type="text" class="input form-control" id="paramMinPrice"
+								<input type="text" class="input form-control" id="address"
 									required />
 								<div class="invalid-feedback">必填欄位</div>
 
@@ -193,16 +252,16 @@
 					</tr>
 					<tr align="center" valign="middle">
 						<td>電話</td>
-						<td><input type="text" class="input form-control"
-							id="paramMinPrice" /></td>
+						<td><input type="text" class="input form-control" id="phone" />
+						</td>
 						<td>傳真</td>
-						<td><input type="text" class="input form-control"
-							id="paramPrice" /></td>
+						<td><input type="text" class="input form-control" id="fax" />
+						</td>
 					</tr>
 					<tr align="center" valign="middle">
 						<td>備註</td>
 						<td colspan="3"><textarea class="input form-control"
-								id="exampleFormControlTextarea1" rows="3"></textarea></td>
+								id="memo" rows="3"></textarea></td>
 					</tr>
 				</table>
 
@@ -227,7 +286,7 @@
 								style="border-style: none" /></td>
 							<td><input type="text" class="input" name="job"
 								style="border-style: none" /></td>
-							<td><input type="text" class="input" name="comPhone"
+							<td><input type="text" class="input" name="contactPhone"
 								style="border-style: none" /></td>
 							<td><input type="text" class="input" name="email"
 								style="border-style: none" /></td>
@@ -238,7 +297,7 @@
 								style="border-style: none" /></td>
 							<td><input type="text" class="input" name="job"
 								style="border-style: none" /></td>
-							<td><input type="text" class="input" name="comPhone"
+							<td><input type="text" class="input" name="contactPhone"
 								style="border-style: none" /></td>
 							<td><input type="text" class="input" name="email"
 								style="border-style: none" /></td>
@@ -247,9 +306,16 @@
 					</tbody>
 				</table>
 				<br></br>
-				<div align="center">
-					<button type="button" id="btn_save">儲存</button>
-					<button type="button" id="btn_reset">清空重填</button>
+				<div align="center" class="row">
+					<div class="col-md-5" align="right">
+						<button type="button" id="btn_save"
+							style="border-radius: 5px; width: 100px">儲存</button>
+					</div>
+					<div class="col-md-2"></div>
+					<div class="col-md-5" align="left">
+						<button type="button" id="btn_reset"
+							style="border-radius: 5px; width: 100px">清空重填</button>
+					</div>
 				</div>
 			</div>
 		</form>
