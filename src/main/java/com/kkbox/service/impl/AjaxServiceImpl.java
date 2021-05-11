@@ -89,4 +89,10 @@ public class AjaxServiceImpl implements AjaxService {
 
 	}
 
+	@Override
+	public void delete(String taxId) {
+		contactRepo.deleteByTaxId(taxId);
+		vendorRepo.deleteById(taxId);
+	}
+
 }

@@ -153,8 +153,17 @@
 										$('<button/>').html('刪除').css({
 											'border-radius' : '20px',
 											'width' : '80px'
-										}).click(function(){
-											$(this).parents('tr').remove();
+										}).click(function() {
+											var button = $(this);
+											$.ajax({
+												url: 'delete',
+												type: 'post',
+												data: {
+													taxId: row.taxId
+												}, success: function() {													
+													button.parents('tr').remove();
+												}
+											});
 										})
 									)
 								)
