@@ -36,46 +36,51 @@
 		return {
 
 			initApp : function() {
-
+			
+				function genValidatorDiv(inputName, needCheck) {
+					var div = $('<div/>').addClass('form-group').append(
+						$('<input>').attr({
+							type : 'text',
+							name: inputName,
+							required: needCheck
+						}).addClass('input form-control valid').css('border-style', 'none')
+					);
+					
+					if (needCheck) {						
+						div.append($('<div/>').addClass('invalid-feedback').html('必填欄位'))
+					}
+					
+					return div;
+				}
+				
 				function genNewTr() {
 					return $('<tr/>').append(
-						$('<td/>').append($('<input/>').attr({
-							type : 'text',
-							name : 'name'
-						}).addClass('input').css('border-style', 'none'))).append(
-							$('<td/>').append($('<input/>').attr({
-								type : 'text',
-								name : 'job'
-							}).addClass('input').css('border-style', 'none')))
-						.append(
-							$('<td/>').append($('<input/>').attr({
-								type : 'text',
-								name : 'contactPhone'
-							}).addClass('input').css('border-style', 'none')))
-						.append(
-							$('<td/>').append($('<input/>').attr({
-								type : 'text',
-								name : 'email'
-							}).addClass('input').css('border-style', 'none')))
-						.append(
-							$('<td/>').append(
-								$('<button/>').addClass('deleteRow').attr('type','button').html('-').click(function() {
-									$(this).parents('tr').remove();
-								})
-							)
-						);
+						$('<td/>').append(
+							genValidatorDiv('name', true)
+						)
+					).append(
+						$('<td/>').append(
+							genValidatorDiv('job', true)
+						)
+					).append(
+						$('<td/>').append(
+							genValidatorDiv('contactPhone')
+						)
+					).append(
+						$('<td/>').append(
+							genValidatorDiv('email')
+						)
+					).append(
+						$('<td/>').append(
+							$('<button/>').addClass('deleteRow').attr('type','button').css('margin-top', '50%').html('-').click(function() {
+								$(this).parents('tr').remove();
+							})
+						)
+					);
 				};
 
-				$('#commulator').on('click', '.addRow', function() {
-					$($('.deleteRow')[0]).parents('tr').after(genNewTr());
-				});
-
-				$('.deleteRow').click(function() {
-					if ($('.deleteRow').length === 1) {
-						alert('廠商資料至少須包含一筆聯絡人資料');
-						return;
-					}
-					$(this).parents('tr').remove();
+				$('.addRow').click(function() {
+					$('#contactInfo tr:nth-child(2)').after(genNewTr());
 				});
 
 				$('#btn_reset').click(function() {
@@ -84,7 +89,7 @@
 				});
 
 				$('#btn_save').click(function(event) {
-					if (!$(this).parents('form').get(0).checkValidity()) {
+					if (!$('#saveForm').get(0).checkValidity()) {
 						event.preventDefault();
 						event.stopPropagation();
 						$('#saveForm').addClass('was-validated');
@@ -175,7 +180,6 @@
 			}
 		};
 	};
-	//window.onload = demo.initApp;
 	$(demo.initApp);
 </script>
 <head>
@@ -275,9 +279,9 @@
 				</table>
 
 				<br></br>
-				<table class="table table-bordered" id="commulator"
+				<table class="table table-bordered" id="contactInfo"
 					style="width: 80%; margin: auto">
-					<thead class="thead-light">
+					<thead class="thead-light">  
 						<tr align='center' valign="middle">
 							<td colspan="5" style="font-weight: bold;">聯絡人</td>
 						</tr>
@@ -291,26 +295,25 @@
 					</thead>
 					<tbody id="commuTbody">
 						<tr>
-							<td><input type="text" class="input" name="name"
+							<td>
+								<div class="form-group">
+									<input type="text" class="input form-control valid" name="name"
+										style="border-style: none" required/>
+									<div class="invalid-feedback">必填欄位</div>
+								</div>
+							</td>
+							<td>
+								<div class="form-group">
+									<input type="text" class="input form-control valid" name="job"
+										style="border-style: none" required/>
+									<div class="invalid-feedback">必填欄位</div>
+								</div>
+							</td>
+							<td><input type="text" class="input form-control valid" name="contactPhone"
 								style="border-style: none" /></td>
-							<td><input type="text" class="input" name="job"
+							<td><input type="text" class="input form-control valid" name="email"
 								style="border-style: none" /></td>
-							<td><input type="text" class="input" name="contactPhone"
-								style="border-style: none" /></td>
-							<td><input type="text" class="input" name="email"
-								style="border-style: none" /></td>
-							<td><button type="button" class="deleteRow">-</button></td>
-						</tr>
-						<tr>
-							<td><input type="text" class="input" name="name"
-								style="border-style: none" /></td>
-							<td><input type="text" class="input" name="job"
-								style="border-style: none" /></td>
-							<td><input type="text" class="input" name="contactPhone"
-								style="border-style: none" /></td>
-							<td><input type="text" class="input" name="email"
-								style="border-style: none" /></td>
-							<td><button type="button" class="addRow">+</button></td>
+							<td><button type="button" class="addRow" style="margin-top:50%">+</button></td>
 						</tr>
 					</tbody>
 				</table>
