@@ -72,8 +72,8 @@
 	<logger name="org.hibernate.type.descriptor.sql.BasicBinder"
 		level="trace" additivity="false">
 		<appender-ref ref="Hibernate-Appender" />
-		<appender-ref ref="file-sql" />
-	</logger>
+<!-- 		<appender-ref ref="file-sql" /> -->	
+    </logger>
 
 	<root level="info">
 		<appender-ref ref="Console-Appender" />
